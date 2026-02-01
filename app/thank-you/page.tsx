@@ -1,7 +1,6 @@
 "use client"
 
-import { Suspense } from "react"
-import { useEffect, useState, useMemo } from "react"
+import { useEffect, useState, useMemo, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { motion } from "framer-motion"
 import { CheckCircle2 } from "lucide-react"
@@ -142,10 +141,16 @@ function ThankYouContent() {
 
 export default function ThankYouPage() {
   return (
-    <Suspense fallback={<div className="flex min-h-screen items-center justify-center"><div>Loading...</div></div>}>
-      <Header />
+    <Suspense fallback={
+      <>
+        <Header />
+        <main className="flex min-h-screen items-center justify-center bg-background">
+          <div className="text-muted-foreground">Loading...</div>
+        </main>
+        <Footer />
+      </>
+    }>
       <ThankYouContent />
     </Suspense>
   )
 }
-
