@@ -71,6 +71,7 @@ export function BranchSelectorSection() {
             }))}
             placeholder={isLoading ? "Loading…" : "Select a country"}
             isDisabled={isLoading || countries.length === 0}
+            wrapWithClassName
             className="h-11 w-full max-w-[280px] border-2 border-border bg-card text-base shadow-md transition-all hover:border-steel-red/30 hover:shadow-lg"
           />
         </div>
