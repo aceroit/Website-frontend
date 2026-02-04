@@ -10,7 +10,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { CustomSelect } from "@/components/ui/custom-select"
-import { Label } from "@/components/ui/label"
 import { BranchAccordionItem } from "./branch-accordion-item"
 import { useBranches } from "@/hooks/use-branches"
 import { cn } from "@/lib/utils"
@@ -58,10 +57,7 @@ export function BranchSelectorSection() {
       </div>
 
       <div className="space-y-10">
-        <div className="mx-auto flex max-w-sm flex-col items-center">
-          <Label className="mb-4 text-center text-sm font-semibold uppercase tracking-wider text-foreground">
-            Select Country
-          </Label>
+        <div className="flex flex-wrap items-center justify-center gap-6">
           <CustomSelect
             value={selectedCountry}
             onValueChange={setSelectedCountry}
@@ -71,8 +67,7 @@ export function BranchSelectorSection() {
             }))}
             placeholder={isLoading ? "Loading…" : "Select a country"}
             isDisabled={isLoading || countries.length === 0}
-            wrapWithClassName
-            className="h-11 w-full max-w-[280px] border-2 border-border bg-card text-base shadow-md transition-all hover:border-steel-red/30 hover:shadow-lg"
+            className="h-12 w-[220px] text-base font-medium"
           />
         </div>
 
