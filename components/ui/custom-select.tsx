@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef, useState } from 'react'
+import React from 'react'
 import ReactSelect, { 
   Props as SelectProps, 
   components,
@@ -24,8 +24,6 @@ interface CustomSelectProps extends Omit<SelectProps<CustomSelectOption, false, 
   placeholder?: string
   size?: 'sm' | 'default'
   className?: string
-  /** When true, className is applied to a wrapper and the control has no border (single border, fixes double-border look) */
-  wrapWithClassName?: boolean
 }
 
 export function CustomSelect({
@@ -35,12 +33,9 @@ export function CustomSelect({
   placeholder = 'Select...',
   size = 'default',
   className,
-  wrapWithClassName = false,
   ...props
 }: CustomSelectProps) {
   const selectedOption = options.find(opt => opt.value === value)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const openedAtRef = useRef<number | null>(null)
 
   const customStyles: StylesConfig<CustomSelectOption, false> = {
     control: (base, state) => ({
@@ -48,23 +43,22 @@ export function CustomSelect({
       minHeight: size === 'sm' ? '32px' : '36px',
       height: size === 'sm' ? '32px' : '36px',
       borderRadius: '0.375rem',
-      ...(wrapWithClassName ? { border: 'none', boxShadow: 'none' } : {}),
-      borderColor: wrapWithClassName ? 'transparent' : (state.isFocused 
+      borderColor: state.isFocused 
         ? 'var(--color-ring)' 
-        : 'var(--color-input)'),
+        : 'var(--color-input)',
       backgroundColor: 'transparent',
-      boxShadow: wrapWithClassName ? 'none' : (state.isFocused 
+      boxShadow: state.isFocused 
         ? '0 0 0 3px rgba(113, 113, 122, 0.1)' 
-        : 'none'),
+        : 'none',
       transition: 'all 0.2s',
       cursor: 'pointer',
-      // Remove border when menu is open (only when not wrapWithClassName)
-      ...(!wrapWithClassName && state.menuIsOpen && {
+      // Remove border when menu is open
+      ...(state.menuIsOpen && {
         borderColor: 'transparent',
         boxShadow: 'none',
       }),
       '&:hover': {
-        borderColor: state.menuIsOpen ? 'transparent' : (wrapWithClassName ? 'transparent' : 'var(--color-ring)'),
+        borderColor: state.menuIsOpen ? 'transparent' : 'var(--color-ring)',
       },
     }),
     valueContainer: (base) => ({
@@ -147,19 +141,6 @@ export function CustomSelect({
     }),
   }
 
-  const Control = (controlProps: any) => (
-    <components.Control
-      {...controlProps}
-      onMouseDown={(e: React.MouseEvent) => {
-        setMenuOpen((prev) => {
-          if (!prev) openedAtRef.current = Date.now()
-          return !prev
-        })
-        controlProps.innerProps?.onMouseDown?.(e)
-      }}
-    />
-  )
-
   const DropdownIndicator = (props: any) => {
     return (
       <components.DropdownIndicator {...props}>
@@ -181,21 +162,7 @@ export function CustomSelect({
     )
   }
 
-  const handleMenuOpen = () => {
-    openedAtRef.current = Date.now()
-    setMenuOpen(true)
-  }
-
-  const handleMenuClose = () => {
-    const openedAt = openedAtRef.current
-    if (openedAt != null && Date.now() - openedAt < 250) {
-      return
-    }
-    openedAtRef.current = null
-    setMenuOpen(false)
-  }
-
-  const selectElement = (
+  return (
     <ReactSelect<CustomSelectOption>
       {...props}
       options={options}
@@ -208,18 +175,14 @@ export function CustomSelect({
       placeholder={placeholder}
       styles={customStyles}
       components={{
-        Control,
         DropdownIndicator,
         Option,
       }}
-      className={cn('react-select-container', !wrapWithClassName && className)}
+      className={cn('react-select-container', className)}
       classNamePrefix="react-select"
       menuPlacement="auto"
       menuPosition="fixed"
       menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
-      menuIsOpen={menuOpen}
-      onMenuOpen={handleMenuOpen}
-      onMenuClose={handleMenuClose}
       isSearchable={false}
       // Prevent body scroll on mobile
       closeMenuOnScroll={(e) => {
@@ -227,10 +190,4 @@ export function CustomSelect({
       }}
     />
   )
-
-  if (wrapWithClassName) {
-    return <div className={className}>{selectElement}</div>
-  }
-
-  return selectElement
 }
