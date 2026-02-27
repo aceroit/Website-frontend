@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/dialog"
 import { RichText } from "@/components/ui/rich-text"
 
-
 interface GalleryImage {
   src: string
   alt: string

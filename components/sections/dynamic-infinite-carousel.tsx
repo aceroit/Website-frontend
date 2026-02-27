@@ -70,18 +70,14 @@ export function DynamicInfiniteCarousel({
       'h-[100px] w-[140px] shrink-0 md:h-[120px] md:w-[170px] lg:h-[120px] lg:w-[180px]'
   } else if (isCustomerSection) {
     isLoading = customerLoading
-    // From Customers master (API) – section items ignored
+    // From Customers master (API) – section items AND itemClassName ignored
     items = customers.map((customer) => ({
       image: customer.customerImage?.url || '',
       alt: customer.name,
-      // Customers don't have link field in the model
-    })).filter((item) => item.image) // Filter out items without images
+    })).filter((item) => item.image)
 
-    // Large customer logos from master – ~2–3× bigger than before
-    if (!itemClassName) {
-      finalItemClassName =
-        'h-40 w-64 shrink-0 md:h-52 md:w-80 lg:h-64 lg:w-96'
-    }
+    finalItemClassName =
+      'h-20 w-40 shrink-0 md:h-28 md:w-52 lg:h-36 lg:w-64'
   } else {
     // From section content (staticItems = content.items)
     items = staticItems || []
@@ -98,7 +94,7 @@ export function DynamicInfiniteCarousel({
     return (
       <section
         key={sectionId}
-        className={`border-t border-border ${bgClass} py-16 md:py-24`}
+        className={`border-t border-border ${bgClass} py-16 lg:py-24`}
       >
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           {title && (
@@ -124,7 +120,7 @@ export function DynamicInfiniteCarousel({
     return (
       <section
         key={sectionId}
-        className={`border-t border-border ${bgClass} py-16 md:py-24`}
+        className={`border-t border-border ${bgClass} py-16 lg:py-24`}
       >
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <h2 className="mb-12 text-center text-4xl font-bold tracking-tight text-foreground md:text-5xl">
