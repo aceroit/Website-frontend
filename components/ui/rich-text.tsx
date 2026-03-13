@@ -1,7 +1,7 @@
 "use client"
 
-import { useMemo } from "react"
-import DOMPurify from "isomorphic-dompurify"
+import { useState, useEffect } from "react"
+import DOMPurify from "dompurify"
 import { cn } from "@/lib/utils"
 
 interface RichTextProps {
@@ -13,12 +13,19 @@ const ALLOWED_TAGS = ["b", "strong", "a", "em", "i", "br", "span", "p"]
 const ALLOWED_ATTR = ["href", "target", "rel", "class"]
 
 export function RichText({ html, className }: RichTextProps) {
-  const sanitizedHtml = useMemo(() => {
-    if (!html) return ""
-    return DOMPurify.sanitize(html, {
-      ALLOWED_TAGS,
-      ALLOWED_ATTR,
-    })
+  const [sanitizedHtml, setSanitizedHtml] = useState("")
+
+  useEffect(() => {
+    if (!html) {
+      setSanitizedHtml("")
+      return
+    }
+    setSanitizedHtml(
+      DOMPurify.sanitize(html, {
+        ALLOWED_TAGS,
+        ALLOWED_ATTR,
+      })
+    )
   }, [html])
 
   if (!sanitizedHtml) return null
