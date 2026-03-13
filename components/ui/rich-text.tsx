@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo } from "react"
-import DOMPurify from "dompurify"
+import DOMPurify from "isomorphic-dompurify"
 import { cn } from "@/lib/utils"
 
 interface RichTextProps {
