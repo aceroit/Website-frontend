@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  serverExternalPackages: ['@nuxt/kit'],
   typescript: {
     ignoreBuildErrors: true,
   },
