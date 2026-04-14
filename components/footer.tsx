@@ -138,6 +138,7 @@ export function Footer() {
     return new Date().getFullYear()
   }, [footer])
 
+  const defaultCopyright = "All rights reserved.";
   const copyrightText = useMemo(() => {
     if (footer?.copyright?.isFieldActive) {
       return footer.copyright.text || defaultCopyright
