@@ -4,6 +4,7 @@ import { useMemo } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { useFooter } from "@/hooks/use-footer"
+import { RichText } from "@/components/ui/rich-text"
 
 // Default fallback values
 const defaultFooterLinks = {
@@ -137,29 +138,11 @@ export function Footer() {
     return new Date().getFullYear()
   }, [footer])
 
-  // Get copyright text and parse into company name (linkable) and rest
-  const copyrightParts = useMemo(() => {
-    const defaultText = "Acero Steel Manufacturing. All rights reserved."
-    let text = footer?.copyright?.isFieldActive 
-      ? (footer.copyright.text || defaultText)
-      : defaultText
-    
-    // Strip HTML tags (e.g., <p>...</p>)
-    text = text.replace(/<[^>]*>/g, '').trim()
-    
-    // Parse: "Company Name. All rights reserved." -> companyName + rest
-    const allRightsMatch = text.match(/^(.+?)\.\s*(All rights reserved\.?)$/i)
-    if (allRightsMatch) {
-      return {
-        companyName: allRightsMatch[1].trim(),
-        rest: ". All rights reserved."
-      }
+  const copyrightText = useMemo(() => {
+    if (footer?.copyright?.isFieldActive) {
+      return footer.copyright.text || defaultCopyright
     }
-    // Fallback: just use the whole text as company name
-    return {
-      companyName: text,
-      rest: ""
-    }
+    return defaultCopyright
   }, [footer])
 
   // Get legal links
@@ -362,10 +345,7 @@ export function Footer() {
         <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 lg:flex-row">
           <div className="text-sm text-center text-muted-foreground lg:text-left">
             <span>{`© ${copyrightYear} `}</span>
-            <Link href="/" className="text-[#E10600] hover:text-[#E10600]/80 transition-colors">
-              {copyrightParts.companyName}
-            </Link>
-            <span>{copyrightParts.rest}</span>
+            <RichText html={copyrightText} className="inline" />
           </div>
           <div className="flex items-center gap-6">
             {/* Social Links - Moved here from brand column */}

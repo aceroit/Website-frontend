@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import DOMPurify from "dompurify"
 import { cn } from "@/lib/utils"
 
 interface RichTextProps {
@@ -12,27 +13,21 @@ interface RichTextProps {
 const ALLOWED_TAGS = ["b", "strong", "a", "em", "i", "br", "span", "p"]
 const ALLOWED_ATTR = ["href", "target", "rel", "class"]
 
-export function RichText({ html, className, as = "div" }: RichTextProps) {
-  const [sanitizedHtml, setSanitizedHtml] = useState<string>("")
+export function RichText({ html, className }: RichTextProps) {
+  const [sanitizedHtml, setSanitizedHtml] = useState("")
 
   useEffect(() => {
     if (!html) {
       setSanitizedHtml("")
       return
     }
-
-    import("dompurify").then((DOMPurify) => {
-      let sanitized = DOMPurify.default.sanitize(html, {
+    setSanitizedHtml(
+      DOMPurify.sanitize(html, {
         ALLOWED_TAGS,
         ALLOWED_ATTR,
       })
-      // For inline rendering, strip wrapping <p> tags that cause line breaks
-      if (as === "span") {
-        sanitized = sanitized.replace(/^<p>|<\/p>$/gi, "").replace(/<p>/gi, " ").replace(/<\/p>/gi, "")
-      }
-      setSanitizedHtml(sanitized)
-    })
-  }, [html, as])
+    )
+  }, [html])
 
   if (!sanitizedHtml) return null
 
