@@ -36,7 +36,6 @@ const defaultContactInfo = {
   address: "Jebel Ali Industrial Area 1,\nDubai, United Arab Emirates",
 }
 
-const defaultCopyright = "Acero Steel Manufacturing. All rights reserved."
 
 // Social media icon components
 const SocialIcons: Record<string, React.ReactNode> = {
@@ -131,13 +130,36 @@ export function Footer() {
   }, [footer])
 
   // Get copyright
-  const copyright = useMemo(() => {
+  const copyrightYear = useMemo(() => {
     if (footer?.copyright?.isFieldActive) {
-      const year = footer.copyright.year || new Date().getFullYear()
-      const text = footer.copyright.text || defaultCopyright
-      return `© ${year} ${text}`
+      return footer.copyright.year || new Date().getFullYear()
     }
-    return `© ${new Date().getFullYear()} ${defaultCopyright}`
+    return new Date().getFullYear()
+  }, [footer])
+
+  // Get copyright text and parse into company name (linkable) and rest
+  const copyrightParts = useMemo(() => {
+    const defaultText = "Acero Steel Manufacturing. All rights reserved."
+    let text = footer?.copyright?.isFieldActive 
+      ? (footer.copyright.text || defaultText)
+      : defaultText
+    
+    // Strip HTML tags (e.g., <p>...</p>)
+    text = text.replace(/<[^>]*>/g, '').trim()
+    
+    // Parse: "Company Name. All rights reserved." -> companyName + rest
+    const allRightsMatch = text.match(/^(.+?)\.\s*(All rights reserved\.?)$/i)
+    if (allRightsMatch) {
+      return {
+        companyName: allRightsMatch[1].trim(),
+        rest: ". All rights reserved."
+      }
+    }
+    // Fallback: just use the whole text as company name
+    return {
+      companyName: text,
+      rest: ""
+    }
   }, [footer])
 
   // Get legal links
@@ -338,7 +360,13 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 lg:flex-row">
-          <p className="text-sm text-center text-muted-foreground lg:text-left">{copyright}</p>
+          <div className="text-sm text-center text-muted-foreground lg:text-left">
+            <span>{`© ${copyrightYear} `}</span>
+            <Link href="/" className="text-[#E10600] hover:text-[#E10600]/80 transition-colors">
+              {copyrightParts.companyName}
+            </Link>
+            <span>{copyrightParts.rest}</span>
+          </div>
           <div className="flex items-center gap-6">
             {/* Social Links - Moved here from brand column */}
             {socialLinks.length > 0 && (
