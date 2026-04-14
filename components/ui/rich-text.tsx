@@ -12,8 +12,11 @@ interface RichTextProps {
 
 const ALLOWED_TAGS = ["b", "strong", "a", "em", "i", "br", "span", "p"]
 const ALLOWED_ATTR = ["href", "target", "rel", "class"]
-
-export function RichText({ html, className }: RichTextProps) {
+export function RichText({
+  html,
+  className,
+  as = "div",
+}: RichTextProps): React.ReactElement | null {
   const [sanitizedHtml, setSanitizedHtml] = useState("")
 
   useEffect(() => {
@@ -21,6 +24,7 @@ export function RichText({ html, className }: RichTextProps) {
       setSanitizedHtml("")
       return
     }
+
     setSanitizedHtml(
       DOMPurify.sanitize(html, {
         ALLOWED_TAGS,
