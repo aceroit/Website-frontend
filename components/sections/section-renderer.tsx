@@ -262,6 +262,7 @@ export function SectionRenderer({ sections, isHomePage = false }: SectionRendere
                     images={images}
                     columns={columns}
                     imageOrientation={imageOrientation}
+                    enableImageLink={title.trim() === 'Engineering Excellence' ? true : false}
                   />
                 )
               }
