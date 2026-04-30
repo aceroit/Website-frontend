@@ -57,10 +57,10 @@ export function ImageGallerySection({
     columns === 2
       ? "grid-cols-2"
       : columns === 6
-      ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-6"
-      : imageOrientation === "horizontal"
-      ? "grid-cols-2 md:grid-cols-3"
-      : "grid-cols-2"
+        ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-6"
+        : imageOrientation === "horizontal"
+          ? "grid-cols-2 md:grid-cols-3"
+          : "grid-cols-2"
 
   const gridGap = spacing.gridGap || "gap-6"
 
@@ -98,7 +98,7 @@ export function ImageGallerySection({
             </h2>
             <RichText
               html={paragraph}
-              className="text-lg leading-relaxed text-foreground"
+              className="text-lg leading-relaxed text-muted-foreground"
             />
           </motion.div>
 
@@ -120,21 +120,21 @@ export function ImageGallerySection({
                   onKeyDown={
                     showPreview
                       ? (e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault()
-                            setPreviewImage(image)
-                          }
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault()
+                          setPreviewImage(image)
                         }
+                      }
                       : undefined
                   }
                   className={cn(
                     "relative overflow-hidden rounded-lg border border-border bg-card p-6 shadow-sm",
                     "transition-all duration-300 hover:border-steel-red/30 hover:shadow-md",
                     showPreview &&
-                      "cursor-pointer focus:outline-none focus:ring-2 focus:ring-steel-red focus:ring-offset-2",
+                    "cursor-pointer focus:outline-none focus:ring-2 focus:ring-steel-red focus:ring-offset-2",
                     enableImageLink &&
-                      hasLink &&
-                      "cursor-pointer group"
+                    hasLink &&
+                    "cursor-pointer group"
                   )}
                 >
                   <div className={cn("relative w-full", imageContainerClass)}>
@@ -149,7 +149,7 @@ export function ImageGallerySection({
                     />
                   </div>
 
-                 
+
                 </div>
               )
 
